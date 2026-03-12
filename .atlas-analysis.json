@@ -1,0 +1,136 @@
+{
+  "projectType": "saas",
+  "projectName": "MayTravel",
+  "projectDescription": "AI-powered travel planning assistant using Google Gemini to create personalized trip itineraries.",
+  "theme": "almond",
+  "primaryColor": "#1E88E5",
+  "lightColor": "#64B5F6",
+  "darkColor": "#0D47A1",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "features/ai-trip-planning",
+              "features/user-profiles",
+              "features/trip-management",
+              "features/interests"
+            ]
+          },
+          {
+            "group": "Architecture",
+            "pages": [
+              "architecture/overview",
+              "architecture/database",
+              "architecture/ai-integration"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Authentication",
+            "pages": [
+              "api/auth/login",
+              "api/auth/register"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "api/users/overview",
+              "api/users/get-all",
+              "api/users/get-by-id",
+              "api/users/create",
+              "api/users/update",
+              "api/users/delete",
+              "api/users/interests"
+            ]
+          },
+          {
+            "group": "Trips",
+            "pages": [
+              "api/trips/overview",
+              "api/trips/get-all",
+              "api/trips/get-by-id",
+              "api/trips/create",
+              "api/trips/delete",
+              "api/trips/get-by-user"
+            ]
+          },
+          {
+            "group": "Interests",
+            "pages": [
+              "api/interests/overview",
+              "api/interests/get-all",
+              "api/interests/create",
+              "api/interests/update",
+              "api/interests/delete"
+            ]
+          },
+          {
+            "group": "Points of Interest",
+            "pages": [
+              "api/pois/overview",
+              "api/pois/get-all",
+              "api/pois/create",
+              "api/pois/update",
+              "api/pois/delete"
+            ]
+          },
+          {
+            "group": "Stops",
+            "pages": [
+              "api/stops/create"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "AI-powered trip planning with Google Gemini and RAG",
+    "User authentication and personalized profiles",
+    "Trip itinerary management (trips, days, activities, details)",
+    "Interest-based recommendations",
+    "Points of Interest catalog with Google Maps integration",
+    "Flexible PostgreSQL database for dynamic trip data"
+  ],
+  "publicApiSurface": [
+    "POST /auth/login",
+    "POST /auth/register",
+    "GET /users",
+    "GET /users/:id",
+    "POST /users",
+    "PUT /users/:id",
+    "DELETE /users/:id",
+    "GET /users/:id/interests",
+    "POST /users/:id/interests",
+    "GET /users/:id/trips",
+    "GET /trips",
+    "GET /trips/:id",
+    "POST /users/:id/trips",
+    "DELETE /trips/:id",
+    "GET /interests",
+    "POST /interests",
+    "PUT /interests/:id",
+    "DELETE /interests/:id",
+    "GET /pois",
+    "POST /pois",
+    "PATCH /pois/:id",
+    "DELETE /pois/:id",
+    "POST /stops"
+  ]
+}
