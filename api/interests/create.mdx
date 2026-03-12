@@ -1,0 +1,123 @@
+---
+title: 'Create Interest'
+api: 'POST /interests'
+description: 'Add a new interest to the system'
+---
+
+## Endpoint
+
+```
+POST /interests
+```
+
+## Description
+
+Creates a new interest in the MayTravel system. Once created, this interest can be associated with user profiles to personalize their travel experience.
+
+## Request
+
+### Headers
+
+```
+Content-Type: application/json
+```
+
+### Body Parameters
+
+<ParamField body="name" type="string" required>
+  The name of the interest to create. This should be a descriptive name that users can easily understand.
+</ParamField>
+
+### Request Example
+
+```json
+{
+  "name": "Scuba Diving"
+}
+```
+
+## Response
+
+<ResponseField name="success" type="array">
+  Array containing the result of the creation operation. The response format is database-specific.
+</ResponseField>
+
+### Success Response (201 Created)
+
+The interest has been successfully created in the database.
+
+```json
+[]
+```
+
+<Note>
+  The response returns an empty array on successful creation. This is the standard response from the PostgreSQL database when using INSERT operations.
+</Note>
+
+### Error Response (500 Internal Server Error)
+
+```json
+{
+  "error": "Duplicate interest name"
+}
+```
+
+```json
+{
+  "error": "name is required"
+}
+```
+
+## Code Examples
+
+<CodeGroup>
+
+```javascript JavaScript
+const response = await fetch('http://your-api-base-url.com/interests', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Scuba Diving'
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+data = {
+    "name": "Scuba Diving"
+}
+
+response = requests.post(
+    'http://your-api-base-url.com/interests',
+    json=data
+)
+result = response.json()
+print(result)
+```
+
+```bash cURL
+curl -X POST http://your-api-base-url.com/interests \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Scuba Diving"}'
+```
+
+</CodeGroup>
+
+## Validation
+
+- The `name` field is required in the request body
+- Interest names should be unique in the database
+- Empty or null names will result in an error
+
+## Notes
+
+- The API returns a 201 status code on successful creation
+- Duplicate interest names may cause database constraint errors
+- The response array is empty on success due to the nature of the INSERT operation

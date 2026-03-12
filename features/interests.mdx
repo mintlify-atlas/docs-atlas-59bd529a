@@ -1,0 +1,374 @@
+---
+title: Interests
+description: Customize your travel experience with personal interests that shape AI recommendations
+---
+
+# Travel Interests
+
+Interests are the core of MayTravel's personalization engine. By selecting interests that match your travel style, you enable the AI to generate itineraries tailored specifically to what you love about traveling.
+
+## What Are Interests?
+
+Interests are predefined categories that represent different aspects of travel experiences:
+
+<CardGroup cols={3}>
+  <Card title="Culture & Arts" icon="palette">
+    Museums, galleries, theaters, historical sites, and cultural events.
+  </Card>
+  <Card title="Food & Dining" icon="utensils">
+    Local cuisine, restaurants, food markets, street food, and culinary tours.
+  </Card>
+  <Card title="Nature & Outdoors" icon="tree">
+    Parks, gardens, hiking trails, beaches, and natural landscapes.
+  </Card>
+  <Card title="Adventure" icon="person-hiking">
+    Extreme sports, adventure activities, and adrenaline experiences.
+  </Card>
+  <Card title="Architecture" icon="building">
+    Modern buildings, historical architecture, urban design, and landmarks.
+  </Card>
+  <Card title="Nightlife" icon="moon">
+    Bars, clubs, live music venues, and evening entertainment.
+  </Card>
+  <Card title="Shopping" icon="bag-shopping">
+    Markets, boutiques, shopping districts, and local crafts.
+  </Card>
+  <Card title="Photography" icon="camera">
+    Scenic viewpoints, photogenic locations, and visual experiences.
+  </Card>
+  <Card title="Relaxation" icon="spa">
+    Spas, wellness centers, peaceful locations, and slow travel.
+  </Card>
+</CardGroup>
+
+## How Interests Work
+
+Interests power the AI recommendation system:
+
+<Steps>
+  <Step title="Interest Selection">
+    You choose interests from the available catalog and add them to your profile.
+  </Step>
+  <Step title="Profile Building">
+    Your selected interests create a unique travel profile that represents your preferences.
+  </Step>
+  <Step title="AI Analysis">
+    When generating itineraries, the AI analyzes your interests to understand what matters to you.
+  </Step>
+  <Step title="Personalized Recommendations">
+    Each suggested stop, activity, and destination aligns with one or more of your interests.
+  </Step>
+</Steps>
+
+## Browsing Available Interests
+
+View all interests available in the platform:
+
+```javascript
+GET /api/interests
+
+Response:
+[
+  {
+    "id": 1,
+    "name": "Architecture"
+  },
+  {
+    "id": 2,
+    "name": "Art Galleries"
+  },
+  {
+    "id": 3,
+    "name": "Beach Activities"
+  },
+  {
+    "id": 4,
+    "name": "Fine Dining"
+  },
+  {
+    "id": 5,
+    "name": "Hiking"
+  },
+  {
+    "id": 6,
+    "name": "Historical Sites"
+  },
+  {
+    "id": 7,
+    "name": "Local Cuisine"
+  },
+  {
+    "id": 8,
+    "name": "Museums"
+  },
+  {
+    "id": 9,
+    "name": "Nightlife"
+  },
+  {
+    "id": 10,
+    "name": "Photography"
+  }
+]
+```
+
+## Adding Interests to Your Profile
+
+Select multiple interests to enhance your travel recommendations:
+
+```javascript
+POST /api/users/:id/interests
+
+{
+  "interests_id": [1, 6, 7, 8, 10]
+}
+
+Response:
+{
+  "message": "interests attached to the user correctly"
+}
+```
+
+This adds Architecture, Historical Sites, Local Cuisine, Museums, and Photography to your profile.
+
+<Tip>
+Choose 5-10 interests for balanced recommendations. Too few limits variety, while too many can dilute personalization.
+</Tip>
+
+## Viewing Your Profile Interests
+
+See all interests associated with your account:
+
+```javascript
+GET /api/users/:id/interests
+
+Response:
+{
+  "user_id": 1,
+  "username": "traveler123",
+  "email": "traveler@example.com",
+  "interests": [
+    {
+      "interest_id": 1,
+      "interest_name": "Architecture"
+    },
+    {
+      "interest_id": 6,
+      "interest_name": "Historical Sites"
+    },
+    {
+      "interest_id": 7,
+      "interest_name": "Local Cuisine"
+    },
+    {
+      "interest_id": 8,
+      "interest_name": "Museums"
+    },
+    {
+      "interest_id": 10,
+      "interest_name": "Photography"
+    }
+  ]
+}
+```
+
+## Interest-Driven Recommendations
+
+See how different interest combinations shape your itineraries:
+
+<AccordionGroup>
+  <Accordion title="Cultural Explorer Profile">
+    **Interests**: Museums, Art Galleries, Historical Sites, Architecture, Local Cuisine
+    
+    **Result**: Itineraries featuring iconic museums, gallery districts, UNESCO sites, architectural landmarks, and authentic local restaurants. Days are structured around museum hours and include cultural dining experiences.
+  </Accordion>
+  
+  <Accordion title="Adventure Seeker Profile">
+    **Interests**: Hiking, Adventure Sports, Beach Activities, Photography, Nature
+    
+    **Result**: Itineraries with outdoor activities, scenic hiking trails, water sports, viewpoints for photography, and natural parks. Timing optimized for best lighting and weather conditions.
+  </Accordion>
+  
+  <Accordion title="Food & Nightlife Profile">
+    **Interests**: Local Cuisine, Street Food, Fine Dining, Nightlife, Markets
+    
+    **Result**: Food-focused itineraries with morning markets, lunch at local favorites, cooking classes, food tours, and evening recommendations for dining and entertainment.
+  </Accordion>
+  
+  <Accordion title="Relaxation-Focused Profile">
+    **Interests**: Spas, Parks & Gardens, Beach Activities, Photography, Cafes
+    
+    **Result**: Slower-paced itineraries with peaceful locations, spa time, leisurely park walks, beach relaxation, and cozy cafe stops. Fewer daily activities with longer duration at each.
+  </Accordion>
+</AccordionGroup>
+
+## Managing the Interest Catalog
+
+Administrators can maintain the platform's interest catalog:
+
+### Creating New Interests
+
+```javascript
+POST /api/interests
+
+{
+  "name": "Wine Tasting"
+}
+
+Response:
+{
+  "id": 15,
+  "name": "Wine Tasting"
+}
+```
+
+### Updating Interest Names
+
+```javascript
+PUT /api/interests/:id
+
+{
+  "name": "Craft Beer & Breweries"
+}
+
+Response:
+{
+  "message": "Interest ID 15 data updated successfully"
+}
+```
+
+### Deleting Interests
+
+```javascript
+DELETE /api/interests/:id
+
+Response:
+{
+  "message": "Interest ID 15 was eliminated successfully"
+}
+```
+
+<Warning>
+Deleting an interest removes it from all user profiles. This action affects all users who have selected this interest.
+</Warning>
+
+## Interest Hierarchy
+
+Interests can be specific or broad:
+
+<CardGroup cols={2}>
+  <Card title="Broad Categories" icon="layer-group">
+    General interests like "Culture", "Food", or "Nature" provide wide-ranging recommendations.
+  </Card>
+  <Card title="Specific Interests" icon="bullseye">
+    Detailed interests like "Street Photography", "Vegan Restaurants", or "Art Deco Architecture" create highly targeted suggestions.
+  </Card>
+</CardGroup>
+
+<Tip>
+Mix broad and specific interests in your profile. This gives the AI flexibility while honoring your particular passions.
+</Tip>
+
+## Interest Impact on AI Planning
+
+The AI uses your interests in multiple ways:
+
+<Steps>
+  <Step title="POI Filtering">
+    Points of interest are matched against your interests to select relevant locations.
+  </Step>
+  <Step title="Category Prioritization">
+    Stops matching your interests receive higher priority in the itinerary.
+  </Step>
+  <Step title="Time Allocation">
+    Activities aligned with your interests get more time allocated in the schedule.
+  </Step>
+  <Step title="Context Building">
+    Interest combinations provide context for RAG queries to generate better descriptions.
+  </Step>
+  <Step title="Balance Optimization">
+    The AI balances your multiple interests across days for variety.
+  </Step>
+</Steps>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Diversify Your Selection" icon="shuffle">
+    Choose interests from different categories for well-rounded itineraries.
+  </Card>
+  <Card title="Be Honest" icon="heart">
+    Select what you genuinely enjoy, not what you think you should like.
+  </Card>
+  <Card title="Update Regularly" icon="arrows-rotate">
+    As your preferences evolve, update your interests to keep recommendations fresh.
+  </Card>
+  <Card title="Start Specific" icon="magnifying-glass">
+    New to travel planning? Start with 3-5 specific interests and expand from there.
+  </Card>
+</CardGroup>
+
+## Interest Examples by Travel Style
+
+<Tabs>
+  <Tab title="First-Time Travelers">
+    **Recommended Interests**:
+    - Historical Sites
+    - Museums
+    - Local Cuisine
+    - Photography
+    - Landmarks
+    
+    These cover classic must-see experiences while allowing for personal discovery.
+  </Tab>
+  
+  <Tab title="Experienced Travelers">
+    **Recommended Interests**:
+    - Off-the-Beaten-Path
+    - Local Markets
+    - Street Food
+    - Independent Galleries
+    - Neighborhood Walks
+    
+    These emphasize authentic, less touristy experiences.
+  </Tab>
+  
+  <Tab title="Family Travelers">
+    **Recommended Interests**:
+    - Parks & Playgrounds
+    - Interactive Museums
+    - Family Dining
+    - Beach Activities
+    - Educational Tours
+    
+    These balance fun for kids with engaging activities for adults.
+  </Tab>
+  
+  <Tab title="Solo Travelers">
+    **Recommended Interests**:
+    - Cafes & Co-working
+    - Walking Tours
+    - Photography
+    - Cultural Events
+    - Social Dining
+    
+    These facilitate solo exploration while providing opportunities to connect with others.
+  </Tab>
+</Tabs>
+
+## Learn More
+
+<CardGroup cols={2}>
+  <Card title="User Profiles" icon="user" href="/features/user-profiles">
+    Learn how to set up and manage your profile
+  </Card>
+  <Card title="AI Trip Planning" icon="brain" href="/features/ai-trip-planning">
+    See how interests power AI recommendations
+  </Card>
+  <Card title="Interests API" icon="code" href="/api/interests/overview">
+    View the complete interests API reference
+  </Card>
+  <Card title="Trip Management" icon="map" href="/features/trip-management">
+    Understand how interests shape your itineraries
+  </Card>
+</CardGroup>

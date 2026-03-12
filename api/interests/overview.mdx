@@ -1,0 +1,60 @@
+---
+title: 'Interests API Overview'
+description: 'Manage user interests in the MayTravel platform'
+---
+
+## Overview
+
+The Interests API allows you to manage interests that users can associate with their profiles. Interests help personalize travel recommendations and connect users with similar preferences.
+
+## Base URL
+
+All API requests should be made to:
+
+```
+http://your-api-base-url.com/interests
+```
+
+## Available Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Get All Interests" icon="list" href="/api/interests/get-all">
+    Retrieve all available interests
+  </Card>
+  <Card title="Create Interest" icon="plus" href="/api/interests/create">
+    Add a new interest to the system
+  </Card>
+  <Card title="Update Interest" icon="pen" href="/api/interests/update">
+    Update an existing interest
+  </Card>
+  <Card title="Delete Interest" icon="trash" href="/api/interests/delete">
+    Remove an interest from the system
+  </Card>
+</CardGroup>
+
+## Data Model
+
+An interest object contains the following fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | integer | Unique identifier for the interest |
+| `name` | string | Name of the interest |
+
+## Response Format
+
+All responses are returned in JSON format. Successful responses will contain the requested data, while error responses follow this structure:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## Status Codes
+
+| Status Code | Description |
+|-------------|-------------|
+| `200` | OK - Request successful |
+| `201` | Created - Resource created successfully |
+| `500` | Internal Server Error - An error occurred on the server |

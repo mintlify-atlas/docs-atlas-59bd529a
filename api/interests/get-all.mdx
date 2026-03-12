@@ -1,0 +1,107 @@
+---
+title: 'Get All Interests'
+api: 'GET /interests'
+description: 'Retrieve all interests from the system'
+---
+
+## Endpoint
+
+```
+GET /interests
+```
+
+## Description
+
+Returns all interests available in the MayTravel system. This endpoint requires no authentication and returns a complete list of interests that users can associate with their profiles.
+
+## Request
+
+This endpoint does not require any parameters or request body.
+
+### Headers
+
+No special headers are required for this endpoint.
+
+## Response
+
+<ResponseField name="success" type="array">
+  Array of interest objects
+  
+  <Expandable title="Interest Object">
+    <ResponseField name="id" type="integer">
+      Unique identifier for the interest
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      Name of the interest
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Success Response (200 OK)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Hiking"
+  },
+  {
+    "id": 2,
+    "name": "Photography"
+  },
+  {
+    "id": 3,
+    "name": "Cultural Heritage"
+  },
+  {
+    "id": 4,
+    "name": "Adventure Sports"
+  }
+]
+```
+
+### Error Response (500 Internal Server Error)
+
+```json
+{
+  "error": "Database connection failed"
+}
+```
+
+## Code Examples
+
+<CodeGroup>
+
+```javascript JavaScript
+const response = await fetch('http://your-api-base-url.com/interests', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const interests = await response.json();
+console.log(interests);
+```
+
+```python Python
+import requests
+
+response = requests.get('http://your-api-base-url.com/interests')
+interests = response.json()
+print(interests)
+```
+
+```bash cURL
+curl -X GET http://your-api-base-url.com/interests \
+  -H "Content-Type: application/json"
+```
+
+</CodeGroup>
+
+## Notes
+
+- This endpoint returns all interests without pagination
+- The interests are retrieved directly from the database
+- No authentication is required to view the list of interests

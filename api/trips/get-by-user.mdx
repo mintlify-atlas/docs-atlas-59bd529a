@@ -1,0 +1,120 @@
+---
+title: 'Get User Trips'
+api: 'GET /users/{id}/trips'
+description: 'Retrieve all trips for a specific user'
+---
+
+## Endpoint
+
+```
+GET /users/{id}/trips
+```
+
+Retrieve all trips associated with a specific user, including user information.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user whose trips to retrieve
+</ParamField>
+
+## Response
+
+<ResponseField name="user_id" type="integer">
+  The user's unique identifier
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The user's username
+</ResponseField>
+
+<ResponseField name="trips" type="array">
+  Array of trips belonging to the user
+  
+  <Expandable title="Trip Object">
+    <ResponseField name="id" type="integer">
+      Unique identifier for the trip
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      Title of the trip
+    </ResponseField>
+    
+    <ResponseField name="shelter" type="object">
+      Geographic point representing the shelter location (PostGIS POINT type)
+    </ResponseField>
+    
+    <ResponseField name="arrd" type="string">
+      Arrival date for the trip
+    </ResponseField>
+    
+    <ResponseField name="levd" type="string">
+      Departure/leave date for the trip
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url https://api.maytravel.com/users/5/trips
+```
+
+## Example Response
+
+<ResponseExample>
+```json 200 - Success
+{
+  "user_id": 5,
+  "username": "john_traveler",
+  "trips": [
+    {
+      "id": 1,
+      "title": "Summer Beach Trip",
+      "shelter": {
+        "type": "Point",
+        "coordinates": [-118.2437, 34.0522]
+      },
+      "arrd": "2026-07-15",
+      "levd": "2026-07-22"
+    },
+    {
+      "id": 3,
+      "title": "Winter Ski Adventure",
+      "shelter": {
+        "type": "Point",
+        "coordinates": [-106.3206, 39.1911]
+      },
+      "arrd": "2026-12-20",
+      "levd": "2026-12-27"
+    }
+  ]
+}
+```
+
+```json 200 - No Trips
+{
+  "user_id": 5,
+  "username": "john_traveler",
+  "trips": []
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "User not found"
+}
+```
+</ResponseExample>
+
+## Status Codes
+
+- **200** - Success: Returns user information with their trips
+- **500** - Server Error: An error occurred while fetching user trips
+
+## Notes
+
+- This endpoint uses a LEFT JOIN, so it returns the user even if they have no trips
+- The date fields are abbreviated as `arrd` (arrival date) and `levd` (leave date) in the response
+- If the user has no trips, an empty trips array is returned

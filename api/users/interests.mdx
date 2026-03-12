@@ -1,0 +1,194 @@
+---
+title: 'User Interests'
+description: 'Get and manage interests associated with a user'
+---
+
+Manage the relationship between users and their interests in MayTravel. Users can have multiple interests that help personalize their travel experience.
+
+## Get User Interests
+
+<api>GET /users/:id/interests</api>
+
+Retrieve all interests associated with a specific user.
+
+### Request
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location 'https://api.maytravel.com/users/1/interests' \
+  --header 'Content-Type: application/json'
+```
+
+```javascript JavaScript
+const userId = 1;
+
+fetch(`https://api.maytravel.com/users/${userId}/interests`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+### Response
+
+Returns a structured object with user information and their interests.
+
+<ResponseField name="user_id" type="integer">
+  The user's unique identifier
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The user's username
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address
+</ResponseField>
+
+<ResponseField name="interests" type="array">
+  Array of interest objects associated with the user
+  
+  <Expandable title="Interest Object">
+    <ResponseField name="interest_id" type="integer">
+      The unique identifier of the interest
+    </ResponseField>
+    
+    <ResponseField name="interest_name" type="string">
+      The name of the interest
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "user_id": 1,
+  "username": "johndoe",
+  "email": "johndoe@example.com",
+  "interests": [
+    {
+      "interest_id": 5,
+      "interest_name": "Beach"
+    },
+    {
+      "interest_id": 12,
+      "interest_name": "History"
+    },
+    {
+      "interest_id": 8,
+      "interest_name": "Adventure"
+    }
+  ]
+}
+```
+
+```json 200 - No Interests
+[]
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Add User Interests
+
+<api>POST /users/:id/interests</api>
+
+Attach one or more interests to a user.
+
+### Request
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user
+</ParamField>
+
+<ParamField body="interests_id" type="array" required>
+  Array of interest IDs to attach to the user
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location 'https://api.maytravel.com/users/1/interests' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "interests_id": [5, 12, 8]
+  }'
+```
+
+```javascript JavaScript
+const userId = 1;
+
+fetch(`https://api.maytravel.com/users/${userId}/interests`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    interests_id: [5, 12, 8]
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+### Response
+
+<ResponseField name="message" type="string">
+  Success message confirming interests were attached
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "message": "interests attached to the user correctly"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Invalid interest ID"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `200` - Success: Operation completed successfully
+- `500` - Server Error: Internal server error occurred
+
+## Notes
+
+- When no interests are found for a user, an empty array is returned
+- The `interests_id` array can contain multiple interest IDs to attach in a single request
+- Ensure the interest IDs exist in the interests table before attempting to attach them
+- This endpoint can be used to display user profiles with their preferences

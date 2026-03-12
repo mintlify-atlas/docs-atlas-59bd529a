@@ -1,0 +1,48 @@
+---
+title: 'Trips API Overview'
+description: 'Manage travel trips and their associated information'
+---
+
+## Overview
+
+The Trips API allows you to manage travel trips in the MayTravel platform. Each trip includes details such as title, shelter location (stored as geographic coordinates), arrival and departure dates, and associated stops.
+
+## Available Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Get All Trips" icon="list" href="/api/trips/get-all">
+    Retrieve all trips in the system
+  </Card>
+  <Card title="Get Trip by ID" icon="magnifying-glass" href="/api/trips/get-by-id">
+    Retrieve a specific trip with its stops
+  </Card>
+  <Card title="Create Trip" icon="plus" href="/api/trips/create">
+    Create a new trip for a user
+  </Card>
+  <Card title="Delete Trip" icon="trash" href="/api/trips/delete">
+    Delete an existing trip
+  </Card>
+  <Card title="Get User Trips" icon="user" href="/api/trips/get-by-user">
+    Get all trips for a specific user
+  </Card>
+</CardGroup>
+
+## Trip Object
+
+A trip object contains the following fields:
+
+- **id** - Unique identifier for the trip
+- **user_id** - ID of the user who owns the trip
+- **title** - Title/name of the trip
+- **shelter** - Geographic point (POINT type) representing the shelter location
+- **arrive_date** - Arrival date for the trip
+- **leave_date** - Departure date for the trip
+- **stops** - Array of stops associated with the trip (when retrieved by ID)
+
+## Base URL
+
+All API requests should be made to:
+
+```
+https://api.maytravel.com
+```

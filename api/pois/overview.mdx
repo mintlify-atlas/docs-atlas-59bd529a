@@ -1,0 +1,49 @@
+---
+title: "Points of Interest Overview"
+description: "Manage points of interest in the MayTravel catalog"
+---
+
+The Points of Interest (POI) API allows you to manage locations and attractions in the MayTravel catalog. Each POI includes geographic coordinates, address information, operating hours, and category classification.
+
+## Base Endpoint
+
+```
+/pois
+```
+
+## Available Operations
+
+<CardGroup cols={2}>
+  <Card title="Get All POIs" icon="list" href="/api/pois/get-all">
+    Retrieve all points of interest from the catalog
+  </Card>
+  <Card title="Create POI" icon="plus" href="/api/pois/create">
+    Add a new point of interest to the catalog
+  </Card>
+  <Card title="Update POI" icon="pen" href="/api/pois/update">
+    Update an existing point of interest
+  </Card>
+  <Card title="Delete POI" icon="trash" href="/api/pois/delete">
+    Remove a point of interest from the catalog
+  </Card>
+</CardGroup>
+
+## POI Data Structure
+
+Each point of interest contains the following information:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | integer | Unique identifier for the POI |
+| `name` | string | Name of the point of interest |
+| `address` | string | Physical address of the location |
+| `lat` | float | Latitude coordinate |
+| `lng` | float | Longitude coordinate |
+| `category` | string | Category classification |
+| `open_time` | time | Opening time |
+| `close_time` | time | Closing time |
+| `average_stay_minutes` | integer | Average visit duration in minutes |
+
+## Geographic Data
+
+POIs use PostGIS for geographic data storage with SRID 4326 (WGS 84) coordinate system. Latitude and longitude values are automatically converted to PostGIS Point geometry.

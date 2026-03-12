@@ -1,0 +1,59 @@
+---
+title: 'Delete Trip'
+api: 'DELETE /trips/{id}'
+description: 'Delete an existing trip'
+---
+
+## Endpoint
+
+```
+DELETE /trips/{id}
+```
+
+Delete a specific trip from the system.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the trip to delete
+</ParamField>
+
+## Response
+
+<ResponseField name="message" type="string">
+  Success message confirming trip deletion
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request DELETE \
+  --url https://api.maytravel.com/trips/1
+```
+
+## Example Response
+
+<ResponseExample>
+```json 200 - Success
+{
+  "message": "Trip Deleted Succesfully"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Trip not found"
+}
+```
+</ResponseExample>
+
+## Status Codes
+
+- **200** - Success: Trip deleted successfully
+- **500** - Server Error: An error occurred while deleting the trip
+
+## Notes
+
+- Deleting a trip may affect associated stops if cascade delete is configured
+- Ensure proper authorization before deleting trips
+- The operation is irreversible

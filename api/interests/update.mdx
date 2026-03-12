@@ -1,0 +1,136 @@
+---
+title: 'Update Interest'
+api: 'PUT /interests/{id}'
+description: 'Update an existing interest'
+---
+
+## Endpoint
+
+```
+PUT /interests/{id}
+```
+
+## Description
+
+Updates the name of an existing interest in the MayTravel system. This allows you to modify interest details while maintaining the same ID.
+
+## Request
+
+### Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the interest to update
+</ParamField>
+
+### Headers
+
+```
+Content-Type: application/json
+```
+
+### Body Parameters
+
+<ParamField body="name" type="string" required>
+  The new name for the interest
+</ParamField>
+
+### Request Example
+
+```json
+{
+  "name": "Wildlife Photography"
+}
+```
+
+## Response
+
+<ResponseField name="message" type="string">
+  A success message confirming the update
+</ResponseField>
+
+### Success Response (200 OK)
+
+```json
+{
+  "message": "Interest ID 5 data updated succesfully"
+}
+```
+
+### Error Response (500 Internal Server Error)
+
+```json
+{
+  "error": "Interest not found"
+}
+```
+
+```json
+{
+  "error": "name is required"
+}
+```
+
+```json
+{
+  "error": "Invalid interest ID"
+}
+```
+
+## Code Examples
+
+<CodeGroup>
+
+```javascript JavaScript
+const interestId = 5;
+
+const response = await fetch(`http://your-api-base-url.com/interests/${interestId}`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Wildlife Photography'
+  })
+});
+
+const result = await response.json();
+console.log(result.message);
+```
+
+```python Python
+import requests
+
+interest_id = 5
+data = {
+    "name": "Wildlife Photography"
+}
+
+response = requests.put(
+    f'http://your-api-base-url.com/interests/{interest_id}',
+    json=data
+)
+result = response.json()
+print(result['message'])
+```
+
+```bash cURL
+curl -X PUT http://your-api-base-url.com/interests/5 \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Wildlife Photography"}'
+```
+
+</CodeGroup>
+
+## Validation
+
+- The `id` parameter must be a valid integer
+- The interest with the specified ID must exist in the database
+- The `name` field is required in the request body
+- The new name should not be empty or null
+
+## Notes
+
+- Only the `name` field can be updated through this endpoint
+- The interest ID remains unchanged after the update
+- If the interest ID doesn't exist, the operation will complete but no rows will be affected
+- Updating an interest will affect all users who have that interest associated with their profile

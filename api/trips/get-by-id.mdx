@@ -1,0 +1,119 @@
+---
+title: 'Get Trip by ID'
+api: 'GET /trips/{id}'
+description: 'Retrieve a specific trip with its stops'
+---
+
+## Endpoint
+
+```
+GET /trips/{id}
+```
+
+Retrieve detailed information about a specific trip, including all associated stops.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the trip to retrieve
+</ParamField>
+
+## Response
+
+<ResponseField name="title" type="string">
+  Title of the trip
+</ResponseField>
+
+<ResponseField name="shelter" type="object">
+  Geographic point representing the shelter location (PostGIS POINT type)
+</ResponseField>
+
+<ResponseField name="arrive_date" type="string">
+  Arrival date for the trip
+</ResponseField>
+
+<ResponseField name="leave_date" type="string">
+  Departure date for the trip
+</ResponseField>
+
+<ResponseField name="stops" type="array">
+  Array of stops associated with this trip
+  
+  <Expandable title="Stop Object">
+    <ResponseField name="id" type="integer">
+      Unique identifier for the stop
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      Name of the point of interest
+    </ResponseField>
+    
+    <ResponseField name="category" type="string">
+      Category/label of the point of interest
+    </ResponseField>
+    
+    <ResponseField name="order" type="integer">
+      Order of the stop in the trip sequence
+    </ResponseField>
+    
+    <ResponseField name="coming" type="string">
+      Arrival time at this stop
+    </ResponseField>
+    
+    <ResponseField name="leaving" type="string">
+      Departure time from this stop
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url https://api.maytravel.com/trips/1
+```
+
+## Example Response
+
+<ResponseExample>
+```json 200 - Success
+{
+  "title": "Summer Beach Trip",
+  "shelter": {
+    "type": "Point",
+    "coordinates": [-118.2437, 34.0522]
+  },
+  "arrive_date": "2026-07-15",
+  "leave_date": "2026-07-22",
+  "stops": [
+    {
+      "id": 101,
+      "name": "Santa Monica Pier",
+      "category": "Attraction",
+      "order": 1,
+      "coming": "2026-07-15T10:00:00Z",
+      "leaving": "2026-07-15T12:00:00Z"
+    },
+    {
+      "id": 102,
+      "name": "Venice Beach",
+      "category": "Beach",
+      "order": 2,
+      "coming": "2026-07-15T14:00:00Z",
+      "leaving": "2026-07-15T18:00:00Z"
+    }
+  ]
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Database query failed"
+}
+```
+</ResponseExample>
+
+## Status Codes
+
+- **200** - Success: Returns trip details with stops
+- **500** - Server Error: An error occurred while fetching the trip

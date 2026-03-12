@@ -1,0 +1,95 @@
+---
+title: 'Create User'
+api: 'POST /users'
+description: 'Create a new user account'
+---
+
+## Request
+
+<ParamField body="username" type="string" required>
+  The username for the new user. Will be converted to lowercase.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The email address for the new user. Will be converted to lowercase.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  The password for the new user
+</ParamField>
+
+<ParamField body="role" type="string" default="user">
+  The role to assign to the user. Defaults to "user" if not specified.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location 'https://api.maytravel.com/users' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "securepassword123",
+    "role": "user"
+  }'
+```
+
+```javascript JavaScript
+fetch('https://api.maytravel.com/users', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'johndoe',
+    email: 'johndoe@example.com',
+    password: 'securepassword123',
+    role: 'user'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+## Response
+
+<ResponseField name="mssg" type="string">
+  Success message confirming user creation
+</ResponseField>
+
+<ResponseExample>
+
+```json 201 - Created
+{
+  "mssg": "Created succesfully"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Duplicate username or email"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `201` - Created: User successfully created
+- `500` - Server Error: Internal server error occurred (e.g., duplicate username/email, database error)
+
+## Notes
+
+- Both `username` and `email` are automatically converted to lowercase before storage
+- The `role` field defaults to "user" if not provided
+- Ensure passwords are securely hashed on the client side or implement server-side hashing

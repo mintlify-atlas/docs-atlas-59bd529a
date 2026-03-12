@@ -1,0 +1,134 @@
+---
+title: "Get All POIs"
+api: "GET /pois"
+description: "Retrieve all points of interest from the catalog"
+---
+
+## Endpoint
+
+```
+GET /pois
+```
+
+## Description
+
+Retrieves all points of interest stored in the MayTravel catalog, including their geographic coordinates, addresses, categories, operating hours, and average visit duration.
+
+## Request
+
+This endpoint does not require any parameters or request body.
+
+### Example Request
+
+```bash cURL
+curl -X GET https://api.maytravel.com/pois
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/pois', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const pois = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get('https://api.maytravel.com/pois')
+pois = response.json()
+```
+
+## Response
+
+<ResponseField name="response" type="array">
+  Array of POI objects
+  
+  <Expandable title="POI Object">
+    <ResponseField name="id" type="integer">
+      Unique identifier for the point of interest
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      Name of the point of interest
+    </ResponseField>
+    
+    <ResponseField name="address" type="string">
+      Physical address of the location
+    </ResponseField>
+    
+    <ResponseField name="poi" type="object">
+      PostGIS Point geometry containing geographic coordinates
+    </ResponseField>
+    
+    <ResponseField name="category" type="string">
+      Category classification of the POI
+    </ResponseField>
+    
+    <ResponseField name="open_time" type="time">
+      Opening time for the location
+    </ResponseField>
+    
+    <ResponseField name="close_time" type="time">
+      Closing time for the location
+    </ResponseField>
+    
+    <ResponseField name="average_stay_minutes" type="integer">
+      Average duration of a visit in minutes
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Success Response
+
+<ResponseExample>
+```json 200 OK
+[
+  {
+    "id": 1,
+    "name": "Eiffel Tower",
+    "address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris",
+    "poi": {
+      "type": "Point",
+      "coordinates": [48.8584, 2.2945]
+    },
+    "category": "monument",
+    "open_time": "09:00:00",
+    "close_time": "23:45:00",
+    "average_stay_minutes": 120
+  },
+  {
+    "id": 2,
+    "name": "Louvre Museum",
+    "address": "Rue de Rivoli, 75001 Paris",
+    "poi": {
+      "type": "Point",
+      "coordinates": [48.8606, 2.3376]
+    },
+    "category": "museum",
+    "open_time": "09:00:00",
+    "close_time": "18:00:00",
+    "average_stay_minutes": 180
+  }
+]
+```
+</ResponseExample>
+
+### Error Response
+
+<ResponseExample>
+```json 500 Internal Server Error
+{
+  "error": "Database connection failed"
+}
+```
+</ResponseExample>
+
+## Implementation Details
+
+Source: `backend/src/components/poi_catalog/controller/PoisController.mjs:5`
+
+The endpoint queries the `poi_catalog` table and returns all records with their associated geographic data stored in PostGIS format.

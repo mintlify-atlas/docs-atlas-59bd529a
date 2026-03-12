@@ -1,0 +1,290 @@
+---
+title: User Profiles
+description: Create and manage personalized user profiles to unlock tailored travel recommendations
+---
+
+# User Profiles
+
+User profiles are the foundation of your personalized MayTravel experience. Your profile stores your account information, travel interests, and preferences that power AI-generated recommendations.
+
+## Profile Components
+
+Each user profile consists of:
+
+<CardGroup cols={2}>
+  <Card title="Account Information" icon="id-card">
+    Username, email, and secure authentication credentials for accessing the platform.
+  </Card>
+  <Card title="Travel Interests" icon="heart">
+    Your selected interests that guide AI recommendations and trip planning.
+  </Card>
+  <Card title="Trip History" icon="clock-rotate-left">
+    All trips you've created, providing context for future recommendations.
+  </Card>
+  <Card title="Role & Permissions" icon="shield">
+    Account type and access levels within the platform.
+  </Card>
+</CardGroup>
+
+## Creating Your Profile
+
+Get started by registering a new account:
+
+```javascript
+POST /api/auth/register
+
+{
+  "username": "traveler123",
+  "email": "traveler@example.com",
+  "password": "securepassword"
+}
+
+Response:
+{
+  "message": "User registered successfully"
+}
+```
+
+Your account is created with a default `user` role, giving you access to all travel planning features.
+
+## Authentication
+
+Log in to access your profile and trips:
+
+```javascript
+POST /api/auth/login
+
+{
+  "identifier": "traveler123",  // Username or email
+  "password": "securepassword"
+}
+
+Response:
+{
+  "message": "Login exitoso",
+  "token": "JWT_GENERADO_AQUI",
+  "user": {
+    "user": "traveler123",
+    "email": "traveler@example.com",
+    "role": "user"
+  }
+}
+```
+
+<Note>
+You can log in using either your username or email address as the identifier.
+</Note>
+
+## Managing Profile Information
+
+### Viewing Your Profile
+
+Retrieve your profile details:
+
+```javascript
+GET /api/users/:id
+
+Response:
+[
+  {
+    "id": 1,
+    "username": "traveler123",
+    "email": "traveler@example.com",
+    "role": "user"
+  }
+]
+```
+
+### Updating Profile Information
+
+Modify your username, email, or password:
+
+```javascript
+PUT /api/users/:id
+
+{
+  "username": "newtraveler",
+  "email": "newemail@example.com",
+  "password": "newpassword"
+}
+
+Response:
+{
+  "mssg": "User ID 1 updated successfully"
+}
+```
+
+<Warning>
+All fields (username, password, email) must be provided when updating your profile, even if only changing one field.
+</Warning>
+
+## Interest Management
+
+### Viewing Your Interests
+
+See all interests associated with your profile:
+
+```javascript
+GET /api/users/:id/interests
+
+Response:
+{
+  "user_id": 1,
+  "username": "traveler123",
+  "email": "traveler@example.com",
+  "interests": [
+    {
+      "interest_id": 3,
+      "interest_name": "Architecture"
+    },
+    {
+      "interest_id": 7,
+      "interest_name": "Local Cuisine"
+    },
+    {
+      "interest_id": 12,
+      "interest_name": "Photography"
+    }
+  ]
+}
+```
+
+### Adding Interests to Your Profile
+
+Attach multiple interests at once to enhance your recommendations:
+
+```javascript
+POST /api/users/:id/interests
+
+{
+  "interests_id": [3, 7, 12, 15]
+}
+
+Response:
+{
+  "message": "interests attached to the user correctly"
+}
+```
+
+The AI uses these interests to personalize every trip itinerary it generates for you.
+
+<Tip>
+Add 5-10 diverse interests for the best recommendations. Mix general categories ("Culture", "Nature") with specific ones ("Street Art", "Coastal Hiking").
+</Tip>
+
+## Profile and AI Recommendations
+
+Your profile directly influences how the AI plans your trips:
+
+<Steps>
+  <Step title="Interest Analysis">
+    The AI reviews all interests in your profile to understand your travel style.
+  </Step>
+  <Step title="Priority Weighting">
+    More specific interests receive higher priority in recommendation algorithms.
+  </Step>
+  <Step title="Context Building">
+    Past trips and interest combinations help the AI understand preferences it should maintain.
+  </Step>
+  <Step title="Personalized Output">
+    Each itinerary reflects your unique combination of interests and travel patterns.
+  </Step>
+</Steps>
+
+## Account Security
+
+<CardGroup cols={2}>
+  <Card title="Password Storage" icon="lock">
+    Passwords are stored securely in the database. Always use strong, unique passwords.
+  </Card>
+  <Card title="Email Verification" icon="envelope-circle-check">
+    Your email serves as both a recovery method and login identifier.
+  </Card>
+  <Card title="Role-Based Access" icon="user-shield">
+    Different roles (user, admin) control access to platform features.
+  </Card>
+  <Card title="Session Management" icon="clock">
+    JWT tokens manage your authenticated sessions securely.
+  </Card>
+</CardGroup>
+
+## Viewing All Trips
+
+Access your complete trip history from your profile:
+
+```javascript
+GET /api/users/:id/trips
+
+Response:
+{
+  "user_id": 1,
+  "username": "traveler123",
+  "trips": [
+    {
+      "id": 1,
+      "title": "Summer in Barcelona",
+      "shelter": { "type": "Point", "coordinates": [2.1686, 41.3874] },
+      "arrd": "2026-07-15",
+      "levd": "2026-07-22"
+    },
+    {
+      "id": 2,
+      "title": "Weekend in Paris",
+      "shelter": { "type": "Point", "coordinates": [2.3522, 48.8566] },
+      "arrd": "2026-08-10",
+      "levd": "2026-08-13"
+    }
+  ]
+}
+```
+
+## Deleting Your Account
+
+If you need to remove your account:
+
+```javascript
+DELETE /api/users/:id
+
+Response:
+{
+  "mssg": "User number 1 deleted successfully"
+}
+```
+
+<Warning>
+Deleting your account is permanent and will remove all associated trips and data.
+</Warning>
+
+## Profile Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep Your Interests Updated">
+    As your travel preferences evolve, update your interests to ensure recommendations stay relevant. Add new interests as you discover new passions.
+  </Accordion>
+  <Accordion title="Use a Valid Email">
+    Ensure your email is accurate and accessible for account recovery and future notifications.
+  </Accordion>
+  <Accordion title="Choose a Memorable Username">
+    Your username appears in trip sharing and collaboration features. Pick something you'll remember.
+  </Accordion>
+  <Accordion title="Regular Profile Reviews">
+    Periodically review your profile and remove interests that no longer align with your travel style.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Add Interests" icon="heart" href="/features/interests">
+    Explore available interests and add them to your profile
+  </Card>
+  <Card title="Create a Trip" icon="plus" href="/features/trip-management">
+    Start planning your first AI-powered trip
+  </Card>
+  <Card title="API Reference" icon="code" href="/api/users/overview">
+    View detailed API documentation for user operations
+  </Card>
+  <Card title="Authentication" icon="key" href="/api/auth/login">
+    Learn more about authentication and security
+  </Card>
+</CardGroup>

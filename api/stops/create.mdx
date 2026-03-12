@@ -1,0 +1,89 @@
+---
+title: 'Create Stop'
+openapi: 'POST /stops'
+---
+
+## Overview
+
+Creates a new stop for a trip. A stop represents a point of interest (POI) that is part of a trip itinerary, including arrival and departure times and the order in which it appears in the trip.
+
+## Endpoint
+
+```
+POST /stops
+```
+
+## Request Body
+
+The request body must be a JSON object containing the following fields:
+
+<ParamField body="trip_id" type="integer" required>
+  The ID of the trip this stop belongs to. Must reference an existing trip in the system.
+</ParamField>
+
+<ParamField body="poi_catalog_id" type="integer" required>
+  The ID of the point of interest from the POI catalog. Must reference an existing POI in the catalog.
+</ParamField>
+
+<ParamField body="stop_order" type="integer" required>
+  The order of this stop in the trip itinerary. Determines the sequence in which stops are visited.
+</ParamField>
+
+<ParamField body="arrival_time" type="string" required>
+  The scheduled arrival time at this stop. Should be in a valid timestamp format.
+</ParamField>
+
+<ParamField body="departure_time" type="string" required>
+  The scheduled departure time from this stop. Should be in a valid timestamp format and must be after the arrival time.
+</ParamField>
+
+## Response
+
+### Success Response
+
+**Status Code:** `200 OK`
+
+```json
+{
+  "message": "Stop added correctly"
+}
+```
+
+### Error Response
+
+**Status Code:** `500 Internal Server Error`
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## Example Request
+
+```json
+{
+  "trip_id": 1,
+  "poi_catalog_id": 42,
+  "stop_order": 3,
+  "arrival_time": "2026-03-15T10:00:00Z",
+  "departure_time": "2026-03-15T12:00:00Z"
+}
+```
+
+## Example Response
+
+```json
+{
+  "message": "Stop added correctly"
+}
+```
+
+## Notes
+
+- All fields in the request body are required
+- The `trip_id` must reference an existing trip
+- The `poi_catalog_id` must reference an existing POI in the catalog
+- The `stop_order` should be unique within the trip or follow your business logic for ordering stops
+- The `departure_time` should logically come after the `arrival_time`
+- If any database constraint is violated (foreign key, data type, etc.), a 500 error will be returned with details

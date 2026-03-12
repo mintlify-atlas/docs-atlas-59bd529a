@@ -1,0 +1,89 @@
+---
+title: 'Create Trip'
+api: 'POST /users/{id}/trips'
+description: 'Create a new trip for a specific user'
+---
+
+## Endpoint
+
+```
+POST /users/{id}/trips
+```
+
+Create a new trip for a specific user. The shelter location is stored as a geographic point using latitude and longitude coordinates.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the user creating the trip
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="title" type="string" required>
+  Title/name of the trip
+</ParamField>
+
+<ParamField body="lat" type="number" required>
+  Latitude coordinate for the shelter location
+</ParamField>
+
+<ParamField body="lng" type="number" required>
+  Longitude coordinate for the shelter location
+</ParamField>
+
+<ParamField body="arrive_date" type="string" required>
+  Arrival date for the trip (ISO 8601 format or date string)
+</ParamField>
+
+<ParamField body="leave_date" type="string" required>
+  Departure date for the trip (ISO 8601 format or date string)
+</ParamField>
+
+## Response
+
+<ResponseField name="message" type="string">
+  Success message confirming trip creation
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request POST \
+  --url https://api.maytravel.com/users/5/trips \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "title": "Summer Beach Trip",
+    "lat": 34.0522,
+    "lng": -118.2437,
+    "arrive_date": "2026-07-15",
+    "leave_date": "2026-07-22"
+  }'
+```
+
+## Example Response
+
+<ResponseExample>
+```json 200 - Success
+{
+  "message": "trip created succesfully"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Invalid user ID"
+}
+```
+</ResponseExample>
+
+## Status Codes
+
+- **200** - Success: Trip created successfully
+- **500** - Server Error: An error occurred while creating the trip
+
+## Notes
+
+- The shelter location is stored as a PostGIS POINT geometry with SRID 4326 (WGS 84)
+- Coordinates are stored as longitude (lng) first, then latitude (lat) in the database
+- Ensure the user ID exists before creating a trip

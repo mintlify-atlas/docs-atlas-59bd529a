@@ -1,0 +1,74 @@
+---
+title: 'Delete User'
+api: 'DELETE /users/:id'
+description: 'Delete a user account from the system'
+---
+
+## Request
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user to delete
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location --request DELETE 'https://api.maytravel.com/users/1' \
+  --header 'Content-Type: application/json'
+```
+
+```javascript JavaScript
+const userId = 1;
+
+fetch(`https://api.maytravel.com/users/${userId}`, {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+## Response
+
+<ResponseField name="mssg" type="string">
+  Success message confirming the user deletion
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "mssg": "User number 1 deleted successfully"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `200` - Success: User successfully deleted
+- `500` - Server Error: Internal server error occurred
+
+## Notes
+
+- This operation permanently deletes the user from the database
+- The endpoint returns a success message even if the user ID does not exist
+- Consider implementing soft deletes or archiving for production systems
+- Be cautious when deleting users as this may affect related data (trips, interests, etc.)

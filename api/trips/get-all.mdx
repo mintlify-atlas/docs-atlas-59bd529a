@@ -1,0 +1,94 @@
+---
+title: 'Get All Trips'
+api: 'GET /trips'
+description: 'Retrieve all trips in the system'
+---
+
+## Endpoint
+
+```
+GET /trips
+```
+
+Retrieve a list of all trips in the system.
+
+## Response
+
+<ResponseField name="trips" type="array">
+  Array of trip objects
+  
+  <Expandable title="Trip Object">
+    <ResponseField name="id" type="integer">
+      Unique identifier for the trip
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="integer">
+      ID of the user who owns the trip
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      Title of the trip
+    </ResponseField>
+    
+    <ResponseField name="shelter" type="object">
+      Geographic point representing the shelter location (PostGIS POINT type)
+    </ResponseField>
+    
+    <ResponseField name="arrive_date" type="string">
+      Arrival date for the trip
+    </ResponseField>
+    
+    <ResponseField name="leave_date" type="string">
+      Departure date for the trip
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url https://api.maytravel.com/trips
+```
+
+## Example Response
+
+<ResponseExample>
+```json 200 - Success
+[
+  {
+    "id": 1,
+    "user_id": 5,
+    "title": "Summer Beach Trip",
+    "shelter": {
+      "type": "Point",
+      "coordinates": [-118.2437, 34.0522]
+    },
+    "arrive_date": "2026-07-15",
+    "leave_date": "2026-07-22"
+  },
+  {
+    "id": 2,
+    "user_id": 3,
+    "title": "Mountain Hiking Adventure",
+    "shelter": {
+      "type": "Point",
+      "coordinates": [-105.2705, 40.0150]
+    },
+    "arrive_date": "2026-08-01",
+    "leave_date": "2026-08-07"
+  }
+]
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+</ResponseExample>
+
+## Status Codes
+
+- **200** - Success: Returns array of all trips
+- **500** - Server Error: An error occurred while fetching trips

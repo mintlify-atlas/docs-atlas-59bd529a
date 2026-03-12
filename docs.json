@@ -1,122 +1,115 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "MayTravel",
+  "theme": "almond",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#1E88E5",
+    "light": "#64B5F6",
+    "dark": "#0D47A1"
   },
-  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/morenojf/MayTravel"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/morenojf/MayTravel"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "introduction",
+              "quickstart"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Core Features",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "features/ai-trip-planning",
+              "features/user-profiles",
+              "features/trip-management",
+              "features/interests"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Architecture",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "architecture/overview",
+              "architecture/database",
+              "architecture/ai-integration"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Authentication",
             "pages": [
-              "api-reference/introduction"
+              "api/auth/login",
+              "api/auth/register"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Users",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api/users/overview",
+              "api/users/get-all",
+              "api/users/get-by-id",
+              "api/users/create",
+              "api/users/update",
+              "api/users/delete",
+              "api/users/interests"
+            ]
+          },
+          {
+            "group": "Trips",
+            "pages": [
+              "api/trips/overview",
+              "api/trips/get-all",
+              "api/trips/get-by-id",
+              "api/trips/create",
+              "api/trips/delete",
+              "api/trips/get-by-user"
+            ]
+          },
+          {
+            "group": "Interests",
+            "pages": [
+              "api/interests/overview",
+              "api/interests/get-all",
+              "api/interests/create",
+              "api/interests/update",
+              "api/interests/delete"
+            ]
+          },
+          {
+            "group": "Points of Interest",
+            "pages": [
+              "api/pois/overview",
+              "api/pois/get-all",
+              "api/pois/create",
+              "api/pois/update",
+              "api/pois/delete"
+            ]
+          },
+          {
+            "group": "Stops",
+            "pages": [
+              "api/stops/create"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

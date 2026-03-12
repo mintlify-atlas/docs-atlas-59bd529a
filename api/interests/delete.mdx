@@ -1,0 +1,130 @@
+---
+title: 'Delete Interest'
+api: 'DELETE /interests/{id}'
+description: 'Remove an interest from the system'
+---
+
+## Endpoint
+
+```
+DELETE /interests/{id}
+```
+
+## Description
+
+Deletes an interest from the MayTravel system. This permanently removes the interest and may affect users who have this interest associated with their profiles.
+
+<Warning>
+  Deleting an interest is a permanent action. Make sure to handle any foreign key constraints with user-interest associations before deleting.
+</Warning>
+
+## Request
+
+### Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the interest to delete
+</ParamField>
+
+### Headers
+
+No special headers are required for this endpoint.
+
+## Response
+
+<ResponseField name="message" type="string">
+  A success message confirming the deletion
+</ResponseField>
+
+### Success Response (200 OK)
+
+```json
+{
+  "message": "Interest ID 3 was eliminated succesfully"
+}
+```
+
+### Error Response (500 Internal Server Error)
+
+```json
+{
+  "error": "Interest not found"
+}
+```
+
+```json
+{
+  "error": "Cannot delete interest: foreign key constraint violation"
+}
+```
+
+```json
+{
+  "error": "Invalid interest ID"
+}
+```
+
+## Code Examples
+
+<CodeGroup>
+
+```javascript JavaScript
+const interestId = 3;
+
+const response = await fetch(`http://your-api-base-url.com/interests/${interestId}`, {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const result = await response.json();
+console.log(result.message);
+```
+
+```python Python
+import requests
+
+interest_id = 3
+
+response = requests.delete(
+    f'http://your-api-base-url.com/interests/{interest_id}'
+)
+result = response.json()
+print(result['message'])
+```
+
+```bash cURL
+curl -X DELETE http://your-api-base-url.com/interests/3 \
+  -H "Content-Type: application/json"
+```
+
+</CodeGroup>
+
+## Validation
+
+- The `id` parameter must be a valid integer
+- The interest with the specified ID should exist in the database
+
+## Important Considerations
+
+<Note>
+  Before deleting an interest, consider the following:
+  
+  - **User Associations**: If users have this interest linked to their profiles, you may need to remove those associations first
+  - **Data Integrity**: Database foreign key constraints may prevent deletion if references exist
+  - **Permanent Action**: Deleted interests cannot be recovered
+</Note>
+
+## Best Practices
+
+1. **Check for Dependencies**: Query for users associated with this interest before deletion
+2. **Soft Delete Alternative**: Consider implementing a soft delete (marking as inactive) instead of permanent deletion
+3. **Audit Trail**: Log interest deletions for auditing purposes
+4. **User Notification**: If this interest is widely used, consider notifying affected users
+
+## Notes
+
+- The deletion is permanent and cannot be undone
+- If the interest ID doesn't exist, the operation will complete but no rows will be affected
+- Foreign key constraints in the database may prevent deletion if the interest is referenced elsewhere

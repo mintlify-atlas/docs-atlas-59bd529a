@@ -1,0 +1,94 @@
+---
+title: 'Get All Users'
+api: 'GET /users'
+description: 'Retrieve a list of all users in the system'
+---
+
+## Request
+
+This endpoint does not require any parameters.
+
+<RequestExample>
+
+```bash cURL
+curl --location 'https://api.maytravel.com/users' \
+  --header 'Content-Type: application/json'
+```
+
+```javascript JavaScript
+fetch('https://api.maytravel.com/users', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+## Response
+
+Returns an array of user objects.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The user's username
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address
+</ResponseField>
+
+<ResponseField name="password" type="string">
+  The user's hashed password
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  The user's role in the system
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+[
+  {
+    "id": 1,
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "hashed_password",
+    "role": "user"
+  },
+  {
+    "id": 2,
+    "username": "janedoe",
+    "email": "janedoe@example.com",
+    "password": "hashed_password",
+    "role": "admin"
+  }
+]
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `200` - Success: Returns array of users
+- `500` - Server Error: Internal server error occurred

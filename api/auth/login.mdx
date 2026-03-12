@@ -1,0 +1,118 @@
+---
+title: 'Login'
+api: 'POST /auth/login'
+description: 'Authenticate a user with their credentials'
+---
+
+## Request
+
+Authenticate a user using either their username or email along with their password.
+
+<ParamField body="identifier" type="string" required>
+  The username or email of the user
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  The user's password
+</ParamField>
+
+## Response
+
+<ResponseField name="message" type="string">
+  Success message indicating login status
+</ResponseField>
+
+<ResponseField name="token" type="string">
+  JWT authentication token for subsequent requests
+</ResponseField>
+
+<ResponseField name="user" type="object">
+  Information about the authenticated user
+  
+  <Expandable title="properties">
+    <ResponseField name="user" type="string">
+      The username
+    </ResponseField>
+    
+    <ResponseField name="email" type="string">
+      The user's email address
+    </ResponseField>
+    
+    <ResponseField name="role" type="string">
+      The user's role in the system
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.maytravel.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "identifier": "john_doe",
+    "password": "mypassword123"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    identifier: 'john_doe',
+    password: 'mypassword123'
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</CodeGroup>
+
+### Success Response
+
+```json
+{
+  "message": "Login exitoso",
+  "token": "JWT_GENERADO_AQUI",
+  "user": {
+    "user": "john_doe",
+    "email": "john@example.com",
+    "role": "user"
+  }
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+
+```json 401 Unauthorized
+{
+  "message": "Credenciales inválidas"
+}
+```
+
+```json 500 Internal Server Error
+{
+  "error": "Error message details"
+}
+```
+
+</ResponseExample>
+
+## Error Codes
+
+<ResponseField name="401" type="error">
+  Invalid credentials - The identifier or password is incorrect
+</ResponseField>
+
+<ResponseField name="500" type="error">
+  Internal server error - An unexpected error occurred during authentication
+</ResponseField>

@@ -1,0 +1,143 @@
+---
+title: "Create POI"
+api: "POST /pois"
+description: "Add a new point of interest to the catalog"
+---
+
+## Endpoint
+
+```
+POST /pois
+```
+
+## Description
+
+Creates a new point of interest in the MayTravel catalog. The endpoint accepts location details, geographic coordinates, category, operating hours, and average visit duration.
+
+## Request
+
+### Body Parameters
+
+<ParamField body="name" type="string" required>
+  Name of the point of interest
+</ParamField>
+
+<ParamField body="address" type="string" required>
+  Physical address of the location
+</ParamField>
+
+<ParamField body="lat" type="float" required>
+  Latitude coordinate (WGS 84 format)
+</ParamField>
+
+<ParamField body="lng" type="float" required>
+  Longitude coordinate (WGS 84 format)
+</ParamField>
+
+<ParamField body="category" type="string" required>
+  Category classification (e.g., "museum", "monument", "restaurant", "park")
+</ParamField>
+
+<ParamField body="open_time" type="time" required>
+  Opening time in HH:MM:SS format
+</ParamField>
+
+<ParamField body="close_time" type="time" required>
+  Closing time in HH:MM:SS format
+</ParamField>
+
+<ParamField body="average_stay_minutes" type="integer" required>
+  Average duration of a visit in minutes
+</ParamField>
+
+### Example Request
+
+```bash cURL
+curl -X POST https://api.maytravel.com/pois \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Sagrada Familia",
+    "address": "Carrer de Mallorca, 401, 08013 Barcelona",
+    "lat": 41.4036,
+    "lng": 2.1744,
+    "category": "monument",
+    "open_time": "09:00:00",
+    "close_time": "20:00:00",
+    "average_stay_minutes": 90
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/pois', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Sagrada Familia',
+    address: 'Carrer de Mallorca, 401, 08013 Barcelona',
+    lat: 41.4036,
+    lng: 2.1744,
+    category: 'monument',
+    open_time: '09:00:00',
+    close_time: '20:00:00',
+    average_stay_minutes: 90
+  })
+});
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+data = {
+    'name': 'Sagrada Familia',
+    'address': 'Carrer de Mallorca, 401, 08013 Barcelona',
+    'lat': 41.4036,
+    'lng': 2.1744,
+    'category': 'monument',
+    'open_time': '09:00:00',
+    'close_time': '20:00:00',
+    'average_stay_minutes': 90
+}
+
+response = requests.post('https://api.maytravel.com/pois', json=data)
+result = response.json()
+```
+
+## Response
+
+### Success Response
+
+<ResponseField name="message" type="string">
+  Confirmation message indicating successful creation
+</ResponseField>
+
+<ResponseExample>
+```json 200 OK
+{
+  "message": "POI created succesfully"
+}
+```
+</ResponseExample>
+
+### Error Response
+
+<ResponseExample>
+```json 500 Internal Server Error
+{
+  "error": "Missing required field: name"
+}
+```
+</ResponseExample>
+
+## Implementation Details
+
+Source: `backend/src/components/poi_catalog/controller/PoisController.mjs:14`
+
+The endpoint converts latitude and longitude coordinates into a PostGIS Point geometry using SRID 4326 (WGS 84) and stores it in the `poi_catalog` table.
+
+<Note>
+  The geographic coordinates are stored using PostGIS `ST_MakePoint` and `ST_SetSRID` functions to ensure proper spatial data handling.
+</Note>

@@ -1,80 +1,437 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: 'Quickstart'
+description: 'Get started with MayTravel backend in under 5 minutes'
 ---
 
-## Get started in three steps
+<Note>
+  MayTravel is an AI-powered travel planning assistant that uses Google Gemini and RAG to help users plan their trips.
+</Note>
 
-Get your documentation site running locally and make your first customization.
+## Prerequisites
 
-### Step 1: Set up your local environment
+Before you begin, ensure you have the following installed:
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+- Node.js (v16 or higher)
+- PostgreSQL (v12 or higher)
+- npm, yarn, or pnpm package manager
 
-### Step 2: Deploy your changes
+## Installation
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+<Steps>
+  <Step title="Clone the repository">
+    Clone the MayTravel repository to your local machine:
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    ```bash
+    git clone https://github.com/morenojf/MayTravel.git
+    cd MayTravel/backend
+    ```
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Install dependencies">
+    Install the required Node.js packages:
 
-### Step 3: Go live
+    <CodeGroup>
+    ```bash npm
+    npm install
+    ```
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    ```bash yarn
+    yarn install
+    ```
 
-## Next steps
+    ```bash pnpm
+    pnpm install
+    ```
+    </CodeGroup>
 
-Now that you have your docs running, explore these key features:
+    The main dependencies include:
+    - **express** (v5.2.1) - Web application framework
+    - **pg** (v8.16.3) - PostgreSQL client for Node.js
+  </Step>
+
+  <Step title="Set up PostgreSQL database">
+    Create a new PostgreSQL database for MayTravel:
+
+    ```sql
+    CREATE DATABASE MayTravel;
+    ```
+
+    <Note>
+      PostgreSQL is used for its flexibility with dynamic schema changes. If the AI adds new fields to itinerary tables, the database won't break.
+    </Note>
+
+    Configure your database connection in `/src/databases/postgres-db/maytraveldb.mjs`:
+
+    ```javascript maytraveldb.mjs
+    import { Client } from 'pg'
+
+    const pgdb = new Client({
+      user: 'postgres',
+      password: 'admin',
+      host: 'localhost',
+      port: 5432,
+      database: 'MayTravel'
+    })
+
+    await pgdb.connect()
+    export const db = pgdb
+    ```
+
+    <Warning>
+      Update the database credentials (user, password, host, port) to match your PostgreSQL configuration before running the server.
+    </Warning>
+  </Step>
+
+  <Step title="Start the server">
+    Start the backend server:
+
+    ```bash
+    node src/app.mjs
+    ```
+
+    You should see the following output:
+
+    ```
+    Example app listening on port 3000
+    ```
+
+    The server is now running at `http://localhost:3000`
+  </Step>
+</Steps>
+
+## Server Configuration
+
+The MayTravel backend uses Express.js and is configured in `/src/configs/server.mjs`:
+
+```javascript server.mjs
+import express from 'express'
+export const app = express()
+export const port = 3000
+```
+
+The main application file (`/src/app.mjs`) sets up middleware and routing:
+
+```javascript app.mjs
+import {app, port} from "./configs/server.mjs"
+import express from 'express'
+import { routing } from "./configs/routing.mjs"
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+
+app.use(express.json());
+app.use('/', routing)
+```
+
+## Making Your First API Call
+
+Now that your server is running, let's test the API endpoints.
+
+### Authentication
+
+<Tabs>
+  <Tab title="Register a new user">
+    ```bash
+    curl -X POST http://localhost:3000/auth/register \
+      -H "Content-Type: application/json" \
+      -d '{
+        "username": "traveler123",
+        "email": "traveler@example.com",
+        "password": "securepassword"
+      }'
+    ```
+
+    **Response:**
+    ```json
+    {
+      "message": "User registered succesfully"
+    }
+    ```
+  </Tab>
+
+  <Tab title="Login">
+    ```bash
+    curl -X POST http://localhost:3000/auth/login \
+      -H "Content-Type: application/json" \
+      -d '{
+        "identifier": "traveler@example.com",
+        "password": "securepassword"
+      }'
+    ```
+
+    **Response:**
+    ```json
+    {
+      "message": "Login exitoso",
+      "token": "JWT_GENERADO_AQUI",
+      "user": {
+        "user": "traveler123",
+        "email": "traveler@example.com",
+        "role": "user"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### User Management
+
+<Tabs>
+  <Tab title="Get all users">
+    ```bash
+    curl http://localhost:3000/users
+    ```
+  </Tab>
+
+  <Tab title="Get user by ID">
+    ```bash
+    curl http://localhost:3000/users/1
+    ```
+  </Tab>
+
+  <Tab title="Update user info">
+    ```bash
+    curl -X PUT http://localhost:3000/users/1 \
+      -H "Content-Type: application/json" \
+      -d '{
+        "username": "newtraveler123",
+        "email": "newemail@example.com"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Delete user">
+    ```bash
+    curl -X DELETE http://localhost:3000/users/1
+    ```
+  </Tab>
+</Tabs>
+
+### Interests
+
+Manage user interests for personalized travel recommendations:
+
+<Tabs>
+  <Tab title="Get all interests">
+    ```bash
+    curl http://localhost:3000/interests
+    ```
+  </Tab>
+
+  <Tab title="Get user interests">
+    ```bash
+    curl http://localhost:3000/users/1/interests
+    ```
+  </Tab>
+
+  <Tab title="Add interests to user">
+    ```bash
+    curl -X POST http://localhost:3000/users/1/interests \
+      -H "Content-Type: application/json" \
+      -d '{
+        "interests_id": [1, 2, 3]
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Create new interest">
+    ```bash
+    curl -X POST http://localhost:3000/interests \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "Adventure Sports",
+        "description": "Activities like hiking, climbing, etc."
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+### Trips
+
+<Tabs>
+  <Tab title="Get all trips">
+    ```bash
+    curl http://localhost:3000/trips
+    ```
+  </Tab>
+
+  <Tab title="Get user trips">
+    ```bash
+    curl http://localhost:3000/users/1/trips
+    ```
+  </Tab>
+
+  <Tab title="Create a trip">
+    ```bash
+    curl -X POST http://localhost:3000/users/1/trips \
+      -H "Content-Type: application/json" \
+      -d '{
+        "destination": "Paris, France",
+        "start_date": "2026-06-01",
+        "end_date": "2026-06-10",
+        "budget": 2000
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Get trip by ID">
+    ```bash
+    curl http://localhost:3000/trips/1
+    ```
+  </Tab>
+
+  <Tab title="Delete a trip">
+    ```bash
+    curl -X DELETE http://localhost:3000/trips/1
+    ```
+  </Tab>
+</Tabs>
+
+### Points of Interest (POIs)
+
+<Tabs>
+  <Tab title="Get all POIs">
+    ```bash
+    curl http://localhost:3000/pois
+    ```
+  </Tab>
+
+  <Tab title="Create a POI">
+    ```bash
+    curl -X POST http://localhost:3000/pois \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "Eiffel Tower",
+        "location": "Paris, France",
+        "category": "Landmark"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Update a POI">
+    ```bash
+    curl -X PATCH http://localhost:3000/pois/1 \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "Tour Eiffel",
+        "description": "Iconic iron tower"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Delete a POI">
+    ```bash
+    curl -X DELETE http://localhost:3000/pois/1
+    ```
+  </Tab>
+</Tabs>
+
+### Stops
+
+Create trip stops (itinerary items):
+
+```bash
+curl -X POST http://localhost:3000/stops \
+  -H "Content-Type: application/json" \
+  -d '{
+    "trip_id": 1,
+    "poi_id": 1,
+    "order": 1,
+    "duration_minutes": 120
+  }'
+```
+
+## Available API Routes
+
+Here's a complete reference of all available endpoints from `/src/configs/routing.mjs`:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| **Authentication** |
+| POST | `/auth/register` | Register a new user |
+| POST | `/auth/login` | Login and receive authentication token |
+| **Users** |
+| GET | `/users` | Get all users |
+| GET | `/users/:id` | Get user by ID |
+| POST | `/users` | Create a new user |
+| PUT | `/users/:id` | Update user information |
+| DELETE | `/users/:id` | Delete a user |
+| GET | `/users/:id/interests` | Get user interests |
+| POST | `/users/:id/interests` | Add interests to user |
+| GET | `/users/:id/trips` | Get user trips |
+| **Interests** |
+| GET | `/interests` | Get all interests |
+| POST | `/interests` | Create a new interest |
+| PUT | `/interests/:id` | Update an interest |
+| DELETE | `/interests/:id` | Delete an interest |
+| **Trips** |
+| GET | `/trips` | Get all trips |
+| GET | `/trips/:id` | Get trip by ID |
+| POST | `/users/:id/trips` | Create a trip for a user |
+| DELETE | `/trips/:id` | Delete a trip |
+| **POIs (Points of Interest)** |
+| GET | `/pois` | Get all POIs |
+| POST | `/pois` | Create a new POI |
+| PATCH | `/pois/:id` | Update a POI |
+| DELETE | `/pois/:id` | Delete a POI |
+| **Stops** |
+| POST | `/stops` | Create a trip stop |
+
+## Next Steps
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="API Reference" icon="book" href="/api/auth/login">
+    Explore detailed API documentation
+  </Card>
+  <Card title="Architecture" icon="sitemap" href="/architecture/overview">
+    Understand the system architecture
+  </Card>
+  <Card title="Database Schema" icon="database" href="/architecture/database">
+    Learn about the database structure
+  </Card>
+  <Card title="AI Integration" icon="robot" href="/architecture/ai-integration">
+    Discover how AI powers MayTravel
+  </Card>
 </CardGroup>
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Database connection failed">
+    Ensure PostgreSQL is running and the credentials in `maytraveldb.mjs` match your database configuration:
+    
+    ```bash
+    # Check if PostgreSQL is running
+    pg_isready
+    
+    # Or on Linux
+    sudo systemctl status postgresql
+    ```
+  </Accordion>
+
+  <Accordion title="Port 3000 already in use">
+    Change the port in `/src/configs/server.mjs`:
+    
+    ```javascript
+    export const port = 3001 // or any available port
+    ```
+  </Accordion>
+
+  <Accordion title="Module import errors">
+    Ensure you're using Node.js v16 or higher and that the project is configured as ES modules (check `"type": "module"` in `package.json`).
+  </Accordion>
+
+  <Accordion title="CORS errors from frontend">
+    The backend has CORS configured in `/src/middlewares/cors.mjs`. Update the origin if your frontend runs on a different port:
+    
+    ```javascript
+    app.use(cors({
+      origin: 'http://localhost:3000', // Update this
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    }))
+    ```
+  </Accordion>
+</AccordionGroup>

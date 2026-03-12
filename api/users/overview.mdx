@@ -1,0 +1,64 @@
+---
+title: 'Users API Overview'
+description: 'Manage user accounts, authentication, and user interests in MayTravel'
+---
+
+The Users API provides endpoints to manage user accounts in the MayTravel platform. This includes creating, retrieving, updating, and deleting users, as well as managing user interests.
+
+## Available Endpoints
+
+### User Management
+
+<CardGroup cols={2}>
+  <Card title="Get All Users" icon="users" href="/api/users/get-all">
+    Retrieve a list of all users in the system
+  </Card>
+  
+  <Card title="Get User by ID" icon="user" href="/api/users/get-by-id">
+    Retrieve a specific user by their ID
+  </Card>
+  
+  <Card title="Create User" icon="user-plus" href="/api/users/create">
+    Create a new user account
+  </Card>
+  
+  <Card title="Update User" icon="pen-to-square" href="/api/users/update">
+    Update user information
+  </Card>
+  
+  <Card title="Delete User" icon="user-minus" href="/api/users/delete">
+    Delete a user account
+  </Card>
+  
+  <Card title="User Interests" icon="heart" href="/api/users/interests">
+    Get and manage user interests
+  </Card>
+</CardGroup>
+
+## User Object
+
+The user object contains the following fields:
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The user's username (stored in lowercase)
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address (stored in lowercase)
+</ResponseField>
+
+<ResponseField name="password" type="string">
+  The user's password (hashed)
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  The user's role in the system (default: "user")
+</ResponseField>
+
+## Authentication
+
+For authentication endpoints, see the [Authentication API](/api/auth) documentation.

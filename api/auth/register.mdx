@@ -1,0 +1,92 @@
+---
+title: 'Register'
+api: 'POST /auth/register'
+description: 'Register a new user account'
+---
+
+## Request
+
+Create a new user account with the provided credentials and information.
+
+<ParamField body="username" type="string" required>
+  The desired username for the new account
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The user's email address
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  The password for the new account
+</ParamField>
+
+## Response
+
+<ResponseField name="message" type="string">
+  Success message confirming user registration
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.maytravel.com/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "jane_smith",
+    "email": "jane@example.com",
+    "password": "securepassword456"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/auth/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'jane_smith',
+    email: 'jane@example.com',
+    password: 'securepassword456'
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</CodeGroup>
+
+### Success Response
+
+```json
+{
+  "message": "User registered succesfully"
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+
+```json 500 Internal Server Error
+{
+  "error": "Error message details"
+}
+```
+
+</ResponseExample>
+
+## Error Codes
+
+<ResponseField name="500" type="error">
+  Internal server error - An error occurred during registration. This may indicate a duplicate username/email or database error
+</ResponseField>
+
+## Notes
+
+- The role field is optional during registration and will be assigned a default value if not provided
+- Ensure the username and email are unique in the system
+- Password requirements and hashing should be implemented on the server side

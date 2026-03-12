@@ -1,0 +1,144 @@
+---
+title: "Update POI"
+api: "PATCH /pois/{id}"
+description: "Update an existing point of interest"
+---
+
+## Endpoint
+
+```
+PATCH /pois/{id}
+```
+
+## Description
+
+Updates one or more fields of an existing point of interest. This endpoint supports partial updates, allowing you to modify only the fields you need to change.
+
+## Request
+
+### Path Parameters
+
+<ParamField path="id" type="integer" required>
+  Unique identifier of the POI to update
+</ParamField>
+
+### Body Parameters
+
+All fields are optional. Only include the fields you want to update.
+
+<ParamField body="name" type="string">
+  Name of the point of interest
+</ParamField>
+
+<ParamField body="address" type="string">
+  Physical address of the location
+</ParamField>
+
+<ParamField body="category" type="string">
+  Category classification
+</ParamField>
+
+<ParamField body="open_time" type="time">
+  Opening time in HH:MM:SS format
+</ParamField>
+
+<ParamField body="close_time" type="time">
+  Closing time in HH:MM:SS format
+</ParamField>
+
+<ParamField body="average_stay_minutes" type="integer">
+  Average duration of a visit in minutes
+</ParamField>
+
+### Example Request
+
+```bash cURL
+curl -X PATCH https://api.maytravel.com/pois/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "open_time": "08:00:00",
+    "close_time": "22:00:00",
+    "average_stay_minutes": 150
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/pois/1', {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    open_time: '08:00:00',
+    close_time: '22:00:00',
+    average_stay_minutes: 150
+  })
+});
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+data = {
+    'open_time': '08:00:00',
+    'close_time': '22:00:00',
+    'average_stay_minutes': 150
+}
+
+response = requests.patch('https://api.maytravel.com/pois/1', json=data)
+result = response.json()
+```
+
+## Response
+
+### Success Response
+
+<ResponseField name="message" type="string">
+  Confirmation message indicating successful update
+</ResponseField>
+
+<ResponseExample>
+```json 200 OK
+{
+  "message": "POI ID 1 updated succesfully"
+}
+```
+</ResponseExample>
+
+### No Data Response
+
+When the request body is empty or contains no valid fields:
+
+<ResponseExample>
+```json 200 OK
+{
+  "message": "Sin datos para actualizar"
+}
+```
+</ResponseExample>
+
+### Error Response
+
+<ResponseExample>
+```json 500 Internal Server Error
+{
+  "error": "POI not found"
+}
+```
+</ResponseExample>
+
+## Implementation Details
+
+Source: `backend/src/components/poi_catalog/controller/PoisController.mjs:36`
+
+The endpoint dynamically constructs an SQL UPDATE statement based on the provided fields. Only the fields included in the request body will be updated in the database.
+
+<Note>
+  This endpoint uses the PATCH method to support partial updates. You can update one or multiple fields without affecting the other properties of the POI.
+</Note>
+
+<Warning>
+  If you need to update geographic coordinates, you must update both `lat` and `lng` fields together to maintain data integrity in the PostGIS Point geometry.
+</Warning>

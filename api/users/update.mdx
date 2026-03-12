@@ -1,0 +1,103 @@
+---
+title: 'Update User'
+api: 'PUT /users/:id'
+description: 'Update user information'
+---
+
+## Request
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user to update
+</ParamField>
+
+<ParamField body="username" type="string" required>
+  The new username for the user. Will be converted to lowercase.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The new email address for the user. Will be converted to lowercase.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  The new password for the user
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location --request PUT 'https://api.maytravel.com/users/1' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "username": "johnupdated",
+    "email": "johnupdated@example.com",
+    "password": "newsecurepassword123"
+  }'
+```
+
+```javascript JavaScript
+const userId = 1;
+
+fetch(`https://api.maytravel.com/users/${userId}`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'johnupdated',
+    email: 'johnupdated@example.com',
+    password: 'newsecurepassword123'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+## Response
+
+<ResponseField name="mssg" type="string">
+  Success message confirming the user update
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "mssg": "User ID 1 updated succesfully"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": "The user ID 1 was not found"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `200` - Success: User successfully updated
+- `404` - Not Found: User with specified ID does not exist
+- `500` - Server Error: Internal server error occurred
+
+## Notes
+
+- Both `username` and `email` are automatically converted to lowercase before storage
+- All three fields (username, email, password) must be provided in the request body
+- This endpoint uses a validation middleware (`validateInfo`) to ensure data integrity
+- The user must exist before attempting to update

@@ -1,0 +1,174 @@
+---
+title: AI Trip Planning
+description: Discover how MayTravel uses Google Gemini AI to create personalized travel itineraries tailored to your interests
+---
+
+# AI-Powered Trip Planning
+
+MayTravel leverages Google Gemini AI with Retrieval-Augmented Generation (RAG) to transform your travel preferences into comprehensive, personalized itineraries. The system analyzes your interests, destination, and travel dates to generate intelligent recommendations that match your travel style.
+
+## How AI Planning Works
+
+<Steps>
+  <Step title="Input Your Travel Details">
+    Provide your destination, travel dates, accommodation location, and trip preferences to the platform.
+  </Step>
+  <Step title="Interest Analysis">
+    The AI analyzes your saved interests and past travel patterns to understand your preferences.
+  </Step>
+  <Step title="Itinerary Generation">
+    Google Gemini generates a day-by-day itinerary with activities, timing, and points of interest tailored to you.
+  </Step>
+  <Step title="Structured Output">
+    The AI organizes your trip into a hierarchical structure: trips → days → stops → details.
+  </Step>
+</Steps>
+
+## Key Benefits
+
+<CardGroup cols={2}>
+  <Card title="Personalized Recommendations" icon="sparkles">
+    Every itinerary is unique, built around your specific interests and travel style.
+  </Card>
+  <Card title="Time Optimization" icon="clock">
+    AI considers travel time, opening hours, and activity duration to create efficient daily plans.
+  </Card>
+  <Card title="Context-Aware Suggestions" icon="brain">
+    RAG technology ensures recommendations are based on real, current information about destinations.
+  </Card>
+  <Card title="Dynamic Flexibility" icon="arrows-rotate">
+    The system adapts to changing preferences and can regenerate portions of your itinerary.
+  </Card>
+</CardGroup>
+
+## Creating an AI-Powered Trip
+
+To create a new trip with AI assistance, send a request to the trips API with your travel details:
+
+```javascript
+POST /api/users/:id/trips
+
+{
+  "title": "Summer in Barcelona",
+  "lat": 41.3874,
+  "lng": 2.1686,
+  "arrive_date": "2026-07-15",
+  "leave_date": "2026-07-22"
+}
+```
+
+The AI engine processes your request along with your user interests to generate a comprehensive itinerary.
+
+## Trip Structure
+
+AI-generated trips follow a structured hierarchy:
+
+<Steps>
+  <Step title="Trip Level">
+    Contains overall trip information: title, destination coordinates, arrival and departure dates.
+  </Step>
+  <Step title="Day Level">
+    Each day is broken down into a logical sequence of activities and experiences.
+  </Step>
+  <Step title="Stop Level">
+    Individual points of interest with arrival times, departure times, and visit order.
+  </Step>
+  <Step title="Detail Level">
+    Rich information about each location including category, description, and practical details.
+  </Step>
+</Steps>
+
+## Retrieving Your AI-Generated Itinerary
+
+Once your trip is created, you can retrieve the full itinerary with all AI-generated details:
+
+```javascript
+GET /api/trips/:id
+
+Response:
+{
+  "title": "Summer in Barcelona",
+  "shelter": { "type": "Point", "coordinates": [2.1686, 41.3874] },
+  "arrive_date": "2026-07-15",
+  "leave_date": "2026-07-22",
+  "stops": [
+    {
+      "id": 1,
+      "name": "Sagrada Familia",
+      "category": "Architecture",
+      "order": 1,
+      "coming": "2026-07-15T09:00:00Z",
+      "leaving": "2026-07-15T11:30:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Park Güell",
+      "category": "Parks & Gardens",
+      "order": 2,
+      "coming": "2026-07-15T12:30:00Z",
+      "leaving": "2026-07-15T15:00:00Z"
+    }
+  ]
+}
+```
+
+## Interest-Based Planning
+
+The AI tailors recommendations based on the interests stored in your profile. For example:
+
+<CardGroup cols={2}>
+  <Card title="Culture Enthusiasts" icon="landmark">
+    Receives recommendations for museums, historical sites, galleries, and cultural events.
+  </Card>
+  <Card title="Adventure Seekers" icon="person-hiking">
+    Gets itineraries featuring outdoor activities, hiking trails, and adventure sports.
+  </Card>
+  <Card title="Food Lovers" icon="utensils">
+    Discovers local restaurants, food markets, cooking classes, and culinary experiences.
+  </Card>
+  <Card title="Relaxation Focus" icon="spa">
+    Finds peaceful parks, spas, beaches, and leisurely activities.
+  </Card>
+</CardGroup>
+
+## Flexible Data Model
+
+MayTravel's database is designed to handle dynamic AI-generated content without breaking:
+
+- **Extensible Schema**: The system can store additional fields the AI generates without requiring schema changes.
+- **JSONB Support**: PostgreSQL's JSONB capabilities allow for flexible, semi-structured data storage.
+- **Graceful Handling**: Unknown fields are preserved and returned in API responses.
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Provide Detailed Interests">
+    The more interests you add to your profile, the better the AI can tailor recommendations. Add specific interests like "modern art", "street food", or "coastal hiking" rather than generic terms.
+  </Accordion>
+  <Accordion title="Set Realistic Time Frames">
+    Give the AI enough time to work with. A 3-day trip allows for rich recommendations, while a single day may feel rushed.
+  </Accordion>
+  <Accordion title="Choose Accurate Accommodation Locations">
+    The shelter coordinates help the AI optimize travel time between activities and your lodging.
+  </Accordion>
+  <Accordion title="Review and Customize">
+    AI suggestions are a starting point. Review the generated itinerary and make adjustments to match your exact preferences.
+  </Accordion>
+</AccordionGroup>
+
+## Learn More
+
+<CardGroup cols={2}>
+  <Card title="User Profiles" icon="user" href="/features/user-profiles">
+    Set up your profile to improve AI recommendations
+  </Card>
+  <Card title="Trip Management" icon="map" href="/features/trip-management">
+    Learn how to manage and organize your trips
+  </Card>
+  <Card title="Interests" icon="heart" href="/features/interests">
+    Understand how interests shape your travel plans
+  </Card>
+  <Card title="AI Integration" icon="microchip" href="/architecture/ai-integration">
+    Technical details about the AI architecture
+  </Card>
+</CardGroup>

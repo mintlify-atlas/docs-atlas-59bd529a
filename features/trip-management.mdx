@@ -1,0 +1,317 @@
+---
+title: Trip Management
+description: Create, organize, and manage your travel itineraries with MayTravel's comprehensive trip management system
+---
+
+# Trip Management
+
+MayTravel provides a hierarchical trip management system that organizes your travels from high-level planning down to individual activity details. Each trip contains a structured itinerary with stops, timing, and location information.
+
+## Trip Structure Overview
+
+Trips follow a clear organizational hierarchy:
+
+<Steps>
+  <Step title="Trip Container">
+    The top level holds your trip title, destination, accommodation location, and travel dates.
+  </Step>
+  <Step title="Stop Sequence">
+    Each trip contains an ordered list of stops representing places to visit during your journey.
+  </Step>
+  <Step title="Points of Interest">
+    Stops link to detailed POI records with names, categories, and location data.
+  </Step>
+  <Step title="Timing Details">
+    Every stop includes arrival time, departure time, and visit order for optimal planning.
+  </Step>
+</Steps>
+
+## Creating a New Trip
+
+Start planning by creating a trip linked to your user account:
+
+```javascript
+POST /api/users/:id/trips
+
+{
+  "title": "Exploring Tokyo",
+  "lat": 35.6762,
+  "lng": 139.6503,
+  "arrive_date": "2026-09-01",
+  "leave_date": "2026-09-07"
+}
+
+Response:
+{
+  "message": "trip created successfully"
+}
+```
+
+<Note>
+The `lat` and `lng` coordinates represent your accommodation or base location (shelter) during the trip. The AI uses this to optimize travel times.
+</Note>
+
+## Trip Properties
+
+Each trip contains the following information:
+
+<ResponseField name="title" type="string" required>
+  A descriptive name for your trip (e.g., "Summer in Barcelona", "Weekend Getaway to Rome").
+</ResponseField>
+
+<ResponseField name="shelter" type="Point" required>
+  Geographic coordinates of your accommodation stored as a PostGIS Point geometry. This serves as your home base.
+</ResponseField>
+
+<ResponseField name="arrive_date" type="date" required>
+  The date you arrive at your destination.
+</ResponseField>
+
+<ResponseField name="leave_date" type="date" required>
+  The date you depart from your destination.
+</ResponseField>
+
+<ResponseField name="user_id" type="integer" required>
+  Links the trip to your user account.
+</ResponseField>
+
+## Viewing Your Trips
+
+### View All Trips by User
+
+Get a complete list of all your trips:
+
+```javascript
+GET /api/users/:id/trips
+
+Response:
+{
+  "user_id": 1,
+  "username": "traveler123",
+  "trips": [
+    {
+      "id": 1,
+      "title": "Exploring Tokyo",
+      "shelter": { "type": "Point", "coordinates": [139.6503, 35.6762] },
+      "arrd": "2026-09-01",
+      "levd": "2026-09-07"
+    },
+    {
+      "id": 2,
+      "title": "Barcelona Culture Tour",
+      "shelter": { "type": "Point", "coordinates": [2.1686, 41.3874] },
+      "arrd": "2026-10-15",
+      "levd": "2026-10-20"
+    }
+  ]
+}
+```
+
+### View Detailed Trip Information
+
+Retrieve a complete itinerary with all stops:
+
+```javascript
+GET /api/trips/:id
+
+Response:
+{
+  "title": "Exploring Tokyo",
+  "shelter": { "type": "Point", "coordinates": [139.6503, 35.6762] },
+  "arrive_date": "2026-09-01",
+  "leave_date": "2026-09-07",
+  "stops": [
+    {
+      "id": 1,
+      "name": "Senso-ji Temple",
+      "category": "Historical Sites",
+      "order": 1,
+      "coming": "2026-09-01T09:00:00Z",
+      "leaving": "2026-09-01T11:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Tokyo Skytree",
+      "category": "Landmarks",
+      "order": 2,
+      "coming": "2026-09-01T14:00:00Z",
+      "leaving": "2026-09-01T17:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Shibuya Crossing",
+      "category": "Urban Experiences",
+      "order": 3,
+      "coming": "2026-09-01T18:30:00Z",
+      "leaving": "2026-09-01T20:00:00Z"
+    }
+  ]
+}
+```
+
+## Understanding Stops
+
+Stops are the individual activities and places in your itinerary:
+
+<CardGroup cols={2}>
+  <Card title="Stop Order" icon="list-ol">
+    Sequential numbers (1, 2, 3...) indicate the recommended order to visit locations.
+  </Card>
+  <Card title="Timing" icon="clock">
+    Each stop includes arrival and departure times for precise planning.
+  </Card>
+  <Card title="POI Details" icon="location-dot">
+    Linked to the POI catalog for rich information about each location.
+  </Card>
+  <Card title="Category Tags" icon="tag">
+    Categorized by type (Historical Sites, Restaurants, Parks, etc.) for easy filtering.
+  </Card>
+</CardGroup>
+
+## Adding Stops to Your Trip
+
+Build out your itinerary by adding stops:
+
+```javascript
+POST /api/stops
+
+{
+  "trip_id": 1,
+  "poi_catalog_id": 42,
+  "stop_order": 4,
+  "arrival_time": "2026-09-02T10:00:00Z",
+  "departure_time": "2026-09-02T12:30:00Z"
+}
+
+Response:
+{
+  "message": "Stop added correctly"
+}
+```
+
+<Tip>
+The AI typically generates stops automatically, but you can manually add stops to customize your itinerary or add personal favorites.
+</Tip>
+
+## Deleting a Trip
+
+Remove a trip you no longer need:
+
+```javascript
+DELETE /api/trips/:id
+
+Response:
+{
+  "message": "Trip Deleted Successfully"
+}
+```
+
+<Warning>
+Deleting a trip also removes all associated stops and itinerary data. This action cannot be undone.
+</Warning>
+
+## Browsing All Trips
+
+Admins or authorized users can view all trips in the system:
+
+```javascript
+GET /api/trips
+
+Response:
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "title": "Exploring Tokyo",
+    "shelter": { "type": "Point", "coordinates": [139.6503, 35.6762] },
+    "arrive_date": "2026-09-01",
+    "leave_date": "2026-09-07"
+  },
+  {
+    "id": 2,
+    "user_id": 2,
+    "title": "Paris in Spring",
+    "shelter": { "type": "Point", "coordinates": [2.3522, 48.8566] },
+    "arrive_date": "2026-04-10",
+    "leave_date": "2026-04-17"
+  }
+]
+```
+
+## Geographic Data
+
+MayTravel uses PostGIS for advanced geographic features:
+
+<AccordionGroup>
+  <Accordion title="Point Geometry">
+    Shelter locations are stored as PostGIS Point geometries in SRID 4326 (WGS 84), the standard for GPS coordinates.
+  </Accordion>
+  <Accordion title="Coordinate Format">
+    Points are represented as [longitude, latitude]. Note that longitude comes first in GeoJSON format.
+  </Accordion>
+  <Accordion title="Spatial Queries">
+    The system can perform distance calculations, proximity searches, and route optimization using spatial functions.
+  </Accordion>
+  <Accordion title="Map Integration">
+    Coordinates integrate seamlessly with mapping services like Google Maps Platform for visualization.
+  </Accordion>
+</AccordionGroup>
+
+## Trip Planning Workflow
+
+Follow this typical workflow for trip planning:
+
+<Steps>
+  <Step title="Create Trip">
+    Start by creating a trip with your destination, dates, and accommodation location.
+  </Step>
+  <Step title="AI Generation">
+    The AI analyzes your profile interests and generates a personalized itinerary with stops.
+  </Step>
+  <Step title="Review Itinerary">
+    View your complete trip to see all recommended stops, timing, and categories.
+  </Step>
+  <Step title="Customize Stops">
+    Add, remove, or reorder stops to perfect your itinerary.
+  </Step>
+  <Step title="Explore Details">
+    Click through to POI details to learn more about each location.
+  </Step>
+  <Step title="Export or Share">
+    Use your completed itinerary during your travels or share it with companions.
+  </Step>
+</Steps>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Accurate Shelter Location" icon="house">
+    Use the exact coordinates of your hotel or accommodation for optimal travel time calculations.
+  </Card>
+  <Card title="Realistic Time Frames" icon="calendar-days">
+    Don't over-pack your itinerary. Allow buffer time between stops for travel and spontaneity.
+  </Card>
+  <Card title="Logical Stop Order" icon="route">
+    Keep stops in a geographic sequence to minimize backtracking across the city.
+  </Card>
+  <Card title="Category Balance" icon="scale-balanced">
+    Mix different stop categories (culture, food, nature) for a well-rounded experience.
+  </Card>
+</CardGroup>
+
+## Learn More
+
+<CardGroup cols={2}>
+  <Card title="AI Trip Planning" icon="brain" href="/features/ai-trip-planning">
+    Understand how AI generates your itineraries
+  </Card>
+  <Card title="Points of Interest" icon="location-dot" href="/api/pois/overview">
+    Explore the POI catalog and available locations
+  </Card>
+  <Card title="Trip API Reference" icon="code" href="/api/trips/overview">
+    View complete API documentation for trips
+  </Card>
+  <Card title="Stops API" icon="map-pin" href="/api/stops/create">
+    Learn how to work with stops programmatically
+  </Card>
+</CardGroup>

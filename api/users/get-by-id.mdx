@@ -1,0 +1,98 @@
+---
+title: 'Get User by ID'
+api: 'GET /users/:id'
+description: 'Retrieve a specific user by their ID'
+---
+
+## Request
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the user to retrieve
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --location 'https://api.maytravel.com/users/1' \
+  --header 'Content-Type: application/json'
+```
+
+```javascript JavaScript
+const userId = 1;
+
+fetch(`https://api.maytravel.com/users/${userId}`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+</RequestExample>
+
+## Response
+
+Returns an array containing the user object (or empty array if not found).
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The user's username
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address
+</ResponseField>
+
+<ResponseField name="password" type="string">
+  The user's hashed password
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  The user's role in the system
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 - Success
+[
+  {
+    "id": 1,
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "hashed_password",
+    "role": "user"
+  }
+]
+```
+
+```json 404 - Not Found
+{
+  "error": "The user ID 1 was not found"
+}
+```
+
+```json 500 - Server Error
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>
+
+## Error Responses
+
+<ResponseField name="error" type="string">
+  Error message describing what went wrong
+</ResponseField>
+
+### Status Codes
+
+- `200` - Success: Returns array with user object
+- `404` - Not Found: User with specified ID does not exist
+- `500` - Server Error: Internal server error occurred

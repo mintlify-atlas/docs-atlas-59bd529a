@@ -1,0 +1,87 @@
+---
+title: "Delete POI"
+api: "DELETE /pois/{id}"
+description: "Remove a point of interest from the catalog"
+---
+
+## Endpoint
+
+```
+DELETE /pois/{id}
+```
+
+## Description
+
+Deletes a point of interest from the MayTravel catalog. This operation permanently removes the POI and all associated data.
+
+## Request
+
+### Path Parameters
+
+<ParamField path="id" type="integer" required>
+  Unique identifier of the POI to delete
+</ParamField>
+
+### Example Request
+
+```bash cURL
+curl -X DELETE https://api.maytravel.com/pois/5
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.maytravel.com/pois/5', {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.delete('https://api.maytravel.com/pois/5')
+result = response.json()
+```
+
+## Response
+
+### Success Response
+
+<ResponseField name="message" type="string">
+  Confirmation message indicating successful deletion with the POI ID
+</ResponseField>
+
+<ResponseExample>
+```json 200 OK
+{
+  "message": "POI 5 deleted sucessfully"
+}
+```
+</ResponseExample>
+
+### Error Response
+
+<ResponseExample>
+```json 500 Internal Server Error
+{
+  "error": "POI not found"
+}
+```
+</ResponseExample>
+
+## Implementation Details
+
+Source: `backend/src/components/poi_catalog/controller/PoisController.mjs:25`
+
+The endpoint removes the POI record from the `poi_catalog` table based on the provided ID.
+
+<Warning>
+  This operation is permanent and cannot be undone. Make sure you have the correct POI ID before deleting.
+</Warning>
+
+<Info>
+  If the POI is referenced by trips or stops in the system, consider the impact on related data before deletion. You may need to implement cascade delete logic or handle orphaned references.
+</Info>
